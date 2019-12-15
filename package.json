@@ -1,0 +1,63 @@
+{
+  "name": "react-native-otpinput",
+  "version": "0.0.1",
+  "description": "Simple OTP input for React Native",
+  "main": "lib/commonjs/index.js",
+  "react-native": "src/index.tsx",
+  "module": "lib/module/index.js",
+  "types": "lib/typescript/src/index.d.ts",
+  "files": [
+    "src",
+    "lib"
+  ],
+  "scripts": {
+    "test": "jest",
+    "typescript": "tsc --noEmit",
+    "lint": "eslint --ext .js,.ts,.tsx .",
+    "prepare": "bob build"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@commitlint/config-conventional": "^8.2.0",
+    "@react-native-community/bob": "^0.7.0",
+    "@types/jest": "^24.0.23",
+    "@types/react": "^16.9.16",
+    "@types/react-native": "^0.60.25",
+    "commitlint": "^8.2.0",
+    "eslint": "^6.7.2",
+    "eslint-config-satya164": "^3.1.2",
+    "eslint-plugin-react-native-globals": "^0.1.2",
+    "husky": "^3.1.0",
+    "jest": "^24.9.0",
+    "prettier": "^1.19.1",
+    "react": "^16.12.0",
+    "react-native": "^0.61.5",
+    "typescript": "^3.7.3"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "yarn lint && yarn typescript"
+    }
+  },
+  "jest": {
+    "preset": "react-native",
+    "modulePathIgnorePatterns": [
+      "<rootDir>/example/node_modules",
+      "<rootDir>/lib/"
+    ]
+  },
+  "@react-native-community/bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      "commonjs",
+      "module",
+      "typescript"
+    ]
+  }
+}
