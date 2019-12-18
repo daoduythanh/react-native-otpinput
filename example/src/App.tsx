@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { registerRootComponent } from 'expo';
 
 import { OtpInput } from 'react-native-otpinput';
@@ -9,14 +9,16 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <OtpInput
-        code={code}
-        onCodeChanged={setCode}
-        pinCount={4}
-        style={{ paddingHorizontal: 20 }}
-        digitInputStyle={styles.codeInputStyle}
-        digitInputHighlightStyle={styles.codeInputStyleFocus}
-      />
+      <View style={styles.wrapper}>
+        <Text>Otp input</Text>
+        <OtpInput
+          code={code}
+          onCodeChanged={setCode}
+          pinCount={4}
+          digitInputStyle={styles.codeInputStyle}
+          digitInputHighlightStyle={styles.codeInputStyleFocus}
+        />
+      </View>
     </View>
   );
 }
@@ -27,6 +29,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  wrapper: {
+    flexDirection: 'column',
+    width: '100%',
+    paddingHorizontal: 20,
   },
   codeInputStyle: {
     fontWeight: 'normal',

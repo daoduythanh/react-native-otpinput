@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
+  Keyboard,
   StyleProp,
   StyleSheet,
   TouchableWithoutFeedback,
@@ -26,6 +27,7 @@ export const OtpInput: React.FC<OtpInputProps> = ({
   code,
   pinCount,
   onCodeChanged,
+  autoFocusOnLoad = false,
   digitInputHighlightStyle = null,
   digitInputStyle = null,
   onCodeFilled = null,
@@ -33,7 +35,7 @@ export const OtpInput: React.FC<OtpInputProps> = ({
   style,
 }) => {
   const [digits, setDigits] = useState<string[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(autoFocusOnLoad ? 0 : -1);
 
   useEffect(() => {
     const array = code ? code.split('') : new Array(pinCount).fill(undefined);
@@ -45,6 +47,22 @@ export const OtpInput: React.FC<OtpInputProps> = ({
       onCodeChanged(newCode);
     }
   }, [code, digits, onCodeChanged]);
+  useEffect(() => {
+    const newCode = digits.join('');
+    if (newCode.length >= pinCount) {
+      onCodeFilled?.(newCode);
+      setCurrentIndex(-1);
+    }
+  }, [digits, onCodeFilled, pinCount]);
+
+  useEffect(() => {
+    const listener = Keyboard.addListener('keyboardDidHide', () =>
+      setCurrentIndex(-1)
+    );
+    return () => {
+      listener.remove();
+    };
+  }, []);
 
   const onChangeText = useCallback(
     (index: number, text: string) => {
@@ -72,16 +90,15 @@ export const OtpInput: React.FC<OtpInputProps> = ({
       setDigits(newDigits);
 
       const newCode = newDigits.join('');
-      if (newCode.length >= pinCount) {
-        onCodeFilled?.(newCode);
-        setCurrentIndex(-1);
-      } else {
-        if (text.length > 0 && index < pinCount - 1) {
-          setCurrentIndex(index + 1);
-        }
+      if (
+        newCode.length < pinCount &&
+        text.length > 0 &&
+        index < pinCount - 1
+      ) {
+        setCurrentIndex(index + 1);
       }
     },
-    [digits, onCodeFilled, pinCount]
+    [digits, pinCount]
   );
   const onKeyPress = useCallback(
     (index: number, key: string) => {
@@ -130,6 +147,7 @@ export const OtpInput: React.FC<OtpInputProps> = ({
 const styles = StyleSheet.create({
   container: {
     width: '100%',
+    height: 90,
   },
   touchable: {
     width: '100%',
