@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-  Keyboard,
   StyleProp,
   StyleSheet,
   TouchableWithoutFeedback,
@@ -35,8 +34,13 @@ export const OtpInput: React.FC<OtpInputProps> = ({
   style,
 }) => {
   const [digits, setDigits] = useState<string[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(autoFocusOnLoad ? 0 : -1);
+  const [focusMap, setFocusMap] = useState<{ [key: number]: boolean }>({});
 
+  useEffect(() => {
+    setFocusMap({
+      0: autoFocusOnLoad ? true : false,
+    });
+  }, [autoFocusOnLoad]);
   useEffect(() => {
     const array = code ? code.split('') : new Array(pinCount).fill(undefined);
     setDigits(array);
@@ -51,18 +55,9 @@ export const OtpInput: React.FC<OtpInputProps> = ({
     const newCode = digits.join('');
     if (newCode.length >= pinCount) {
       onCodeFilled?.(newCode);
-      setCurrentIndex(-1);
+      setFocusMap({});
     }
   }, [digits, onCodeFilled, pinCount]);
-
-  useEffect(() => {
-    const listener = Keyboard.addListener('keyboardDidHide', () =>
-      setCurrentIndex(-1)
-    );
-    return () => {
-      listener.remove();
-    };
-  }, []);
 
   const onChangeText = useCallback(
     (index: number, text: string) => {
@@ -95,7 +90,10 @@ export const OtpInput: React.FC<OtpInputProps> = ({
         text.length > 0 &&
         index < pinCount - 1
       ) {
-        setCurrentIndex(index + 1);
+        setFocusMap(map => ({
+          ...map,
+          [index + 1]: true,
+        }));
       }
     },
     [digits, pinCount]
@@ -105,19 +103,23 @@ export const OtpInput: React.FC<OtpInputProps> = ({
       if (key === 'Backspace') {
         if (!digits[index] && index > 0) {
           onChangeText(index - 1, '');
-          setCurrentIndex(index - 1);
+          setFocusMap(map => ({
+            ...map,
+            [index - 1]: true,
+          }));
         }
       }
     },
     [digits, onChangeText]
   );
   const onWrapperPress = useCallback(() => {
-    let lastDigitIndex = digits.findIndex(digit => !digit);
-    if (lastDigitIndex < 0) {
-      lastDigitIndex = digits.length - 1;
-    }
-    setCurrentIndex(lastDigitIndex);
-  }, [digits]);
+    const filledCount = digits.join('').length;
+    const indexToFocus = Math.min(filledCount, pinCount - 1);
+    setFocusMap(map => ({
+      ...map,
+      [indexToFocus]: true,
+    }));
+  }, [digits, pinCount]);
 
   return (
     <View style={[styles.container, style]}>
@@ -133,7 +135,8 @@ export const OtpInput: React.FC<OtpInputProps> = ({
               secureTextEntry={secureTextEntry}
               value={digits[index]}
               key={`digit-${index}`}
-              isFocus={index === currentIndex}
+              isFocus={focusMap[index]}
+              onBlur={() => setFocusMap({ ...focusMap, [index]: false })}
               onChangeText={text => onChangeText(index, text)}
               onKeyPress={({ nativeEvent: { key } }) => onKeyPress(index, key)}
             />

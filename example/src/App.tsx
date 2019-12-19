@@ -12,11 +12,13 @@ export default function App() {
       <View style={styles.wrapper}>
         <Text>Otp input</Text>
         <OtpInput
+          autoFocusOnLoad
           code={code}
-          onCodeChanged={setCode}
           pinCount={4}
           digitInputStyle={styles.codeInputStyle}
           digitInputHighlightStyle={styles.codeInputStyleFocus}
+          onCodeChanged={setCode}
+          onCodeFilled={code => console.log(`code filled: ${code}`)}
         />
       </View>
     </View>
