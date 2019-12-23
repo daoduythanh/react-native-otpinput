@@ -60,5 +60,8 @@
       "module",
       "typescript"
     ]
+  },
+  "dependencies": {
+    "@use-it/interval": "^0.1.3"
   }
 }

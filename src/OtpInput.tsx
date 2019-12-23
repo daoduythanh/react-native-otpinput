@@ -9,6 +9,7 @@ import {
 
 import { DigitInput } from './DigitInput';
 import { useFocusState } from './hooks/useFocusState';
+import { useClipboard } from './hooks/useClipboard';
 
 export interface OtpInputProps {
   code: string | undefined;
@@ -54,6 +55,8 @@ export const OtpInput: React.FC<OtpInputProps> = ({
       blurAll();
     }
   }, [blurAll, digits, onCodeFilled, pinCount]);
+
+  useClipboard(pinCount, setDigits);
 
   const onChangeText = useCallback(
     (index: number, text: string) => {
