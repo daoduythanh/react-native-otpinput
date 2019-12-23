@@ -10,6 +10,17 @@
     "src",
     "lib"
   ],
+  "keywords": [
+    "react",
+    "react-native",
+    "native",
+    "otp"
+  ],
+  "author": "Đào Duy Thanh",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/daoduythanh/react-native-otpinput.git"
+  },
   "scripts": {
     "test": "jest",
     "typescript": "tsc --noEmit",
