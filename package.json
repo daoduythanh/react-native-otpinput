@@ -1,6 +1,6 @@
 {
-  "name": "react-native-otpinput",
-  "version": "0.0.1",
+  "name": "@daoduythanh/react-native-otpinput",
+  "version": "1.0.0",
   "description": "Simple OTP input for React Native",
   "main": "lib/commonjs/index.js",
   "react-native": "src/index.tsx",
