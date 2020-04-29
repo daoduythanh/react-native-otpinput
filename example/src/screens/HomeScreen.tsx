@@ -11,7 +11,7 @@ type Props = {
 export const HomeScreen: React.FC<Props> = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      {Object.keys(exampleConfig).map(key => (
+      {Object.keys(exampleConfig).map((key) => (
         <Button
           key={key}
           title={exampleConfig[key].title}
