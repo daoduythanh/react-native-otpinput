@@ -18,7 +18,7 @@ export function useFocusState(
 
   const focus = useCallback(
     (index: number) =>
-      setFocusState(state => ({
+      setFocusState((state) => ({
         ...state,
         [index]: true,
       })),
@@ -26,7 +26,7 @@ export function useFocusState(
   );
 
   const blur = useCallback(
-    (index: number) => setFocusState(state => ({ ...state, [index]: false })),
+    (index: number) => setFocusState((state) => ({ ...state, [index]: false })),
     []
   );
 

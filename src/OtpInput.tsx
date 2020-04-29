@@ -74,7 +74,7 @@ export const OtpInput: React.FC<OtpInputProps> = ({
           }
         } else {
           let tmpIndex = index;
-          text.split('').forEach(value => {
+          text.split('').forEach((value) => {
             newDigits[tmpIndex] = value;
             tmpIndex += 1;
           });
@@ -127,7 +127,7 @@ export const OtpInput: React.FC<OtpInputProps> = ({
               key={`digit-${index}`}
               isFocus={focusState[index]}
               onBlur={() => blur(index)}
-              onChangeText={text => onChangeText(index, text)}
+              onChangeText={(text) => onChangeText(index, text)}
               onKeyPress={({ nativeEvent: { key } }) => onKeyPress(index, key)}
             />
           ))}
